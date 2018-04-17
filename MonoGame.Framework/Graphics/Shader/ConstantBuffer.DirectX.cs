@@ -42,10 +42,16 @@ namespace Microsoft.Xna.Framework.Graphics
                 d3dContext.UpdateSubresource(_buffer, _cbuffer);
                 _dirty = false;
             }
-            
+
             // Set the buffer to the right stage.
             if (stage == ShaderStage.Vertex)
                 d3dContext.VertexShader.SetConstantBuffer(slot, _cbuffer);
+            else if (stage == ShaderStage.Hull)
+                d3dContext.HullShader.SetConstantBuffer(slot, _cbuffer);
+            else if (stage == ShaderStage.Domain)
+                d3dContext.DomainShader.SetConstantBuffer(slot, _cbuffer);
+            else if (stage == ShaderStage.Geometry)
+                d3dContext.GeometryShader.SetConstantBuffer(slot, _cbuffer);
             else
                 d3dContext.PixelShader.SetConstantBuffer(slot, _cbuffer);
         }

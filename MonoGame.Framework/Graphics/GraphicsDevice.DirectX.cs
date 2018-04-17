@@ -1272,6 +1272,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (_vertexShader == null)
                 throw new InvalidOperationException("A vertex shader must be set!");
+            if (_hullShader != null && _domainShader == null)
+                throw new InvalidOperationException("A hull shader can only be used with a domain shader!");
+            if (_hullShader == null && _domainShader != null)
+                throw new InvalidOperationException("A domain shader can only be used with a hull shader!");
             if (_pixelShader == null)
                 throw new InvalidOperationException("A pixel shader must be set!");
 
@@ -1288,6 +1292,36 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 _d3dContext.InputAssembler.InputLayout = _vertexShader.InputLayouts.GetOrCreate(_vertexBuffers);
                 _vertexShaderDirty = _vertexBuffersDirty = false;
+            }
+
+            if (_hullShaderDirty)
+            {
+                _d3dContext.HullShader.Set(_hullShader.HullShader);
+
+                unchecked
+                {
+                    _graphicsMetrics._hullShaderCount++;
+                }
+            }
+
+            if (_domainShaderDirty)
+            {
+                _d3dContext.DomainShader.Set(_domainShader.DomainShader);
+
+                unchecked
+                {
+                    _graphicsMetrics._domainShaderCount++;
+                }
+            }
+
+            if (_geometryShaderDirty)
+            {
+                _d3dContext.GeometryShader.Set(_geometryShader.GeometryShader);
+
+                unchecked
+                {
+                    _graphicsMetrics._geometryShaderCount++;
+                }
             }
 
             if (_pixelShaderDirty)

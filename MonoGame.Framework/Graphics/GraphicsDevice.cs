@@ -91,6 +91,36 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
+        /// The active geometry shader.
+        /// </summary>
+        private Shader _domainShader;
+        private bool _domainShaderDirty;
+        private bool DomainShaderDirty
+        {
+            get { return _domainShaderDirty; }
+        }
+
+        /// <summary>
+        /// The active geometry shader.
+        /// </summary>
+        private Shader _hullShader;
+        private bool _hullShaderDirty;
+        private bool HullShaderDirty
+        {
+            get { return _hullShaderDirty; }
+        }
+
+        /// <summary>
+        /// The active geometry shader.
+        /// </summary>
+        private Shader _geometryShader;
+        private bool _geometryShaderDirty;
+        private bool GeometryShaderDirty
+        {
+            get { return _geometryShaderDirty; }
+        }
+
+        /// <summary>
         /// The active pixel shader.
         /// </summary>
         private Shader _pixelShader;
@@ -101,6 +131,9 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         private readonly ConstantBufferCollection _vertexConstantBuffers = new ConstantBufferCollection(ShaderStage.Vertex, 16);
+        private readonly ConstantBufferCollection _hullConstantBuffers = new ConstantBufferCollection(ShaderStage.Hull, 16);
+        private readonly ConstantBufferCollection _domainConstantBuffers = new ConstantBufferCollection(ShaderStage.Domain, 16);
+        private readonly ConstantBufferCollection _geometryConstantBuffers = new ConstantBufferCollection(ShaderStage.Geometry, 16);
         private readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
         /// <summary>
@@ -933,6 +966,48 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        internal Shader HullShader
+        {
+            get { return _hullShader; }
+            set
+            {
+                if (_hullShader == value)
+                    return;
+
+                _hullShader = value;
+                _hullConstantBuffers.Clear();
+                _hullShaderDirty = true;
+            }
+        }
+
+        internal Shader DomainShader
+        {
+            get { return _domainShader; }
+            set
+            {
+                if (_domainShader == value)
+                    return;
+
+                _domainShader = value;
+                _domainConstantBuffers.Clear();
+                _domainShaderDirty = true;
+            }
+        }
+
+        internal Shader GeometryShader
+        {
+            get { return _geometryShader; }
+            set
+            {
+                if (_geometryShader == value)
+                    return;
+
+                _geometryShader = value;
+                _geometryConstantBuffers.Clear();
+                _geometryShaderDirty = true;
+            }
+        }
+
         internal Shader PixelShader
         {
             get { return _pixelShader; }
@@ -952,6 +1027,12 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             if (stage == ShaderStage.Vertex)
                 _vertexConstantBuffers[slot] = buffer;
+            else if (stage == ShaderStage.Hull)
+                _hullConstantBuffers[slot] = buffer;
+            else if (stage == ShaderStage.Domain)
+                _domainConstantBuffers[slot] = buffer;
+            else if (stage == ShaderStage.Geometry)
+                _geometryConstantBuffers[slot] = buffer;
             else
                 _pixelConstantBuffers[slot] = buffer;
         }

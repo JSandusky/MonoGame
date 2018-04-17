@@ -10,6 +10,9 @@ namespace Microsoft.Xna.Framework.Graphics
     internal partial class Shader
     {
         private VertexShader _vertexShader;
+        private HullShader _hullShader;
+        private DomainShader _domainShader;
+        private GeometryShader _geometryShader;
         private PixelShader _pixelShader;
         private byte[] _shaderBytecode;
 
@@ -36,6 +39,36 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        internal HullShader HullShader
+        {
+            get
+            {
+                if (_hullShader == null)
+                    CreateHullShader();
+                return _hullShader;
+            }
+        }
+
+        internal DomainShader DomainShader
+        {
+            get
+            {
+                if (_domainShader == null)
+                    CreateDomainShader();
+                return _domainShader;
+            }
+        }
+
+        internal GeometryShader GeometryShader
+        {
+            get
+            {
+                if (_geometryShader == null)
+                    CreateGeometryShader();
+                return _geometryShader;
+            }
+        }
+
         internal PixelShader PixelShader
         {
             get
@@ -51,7 +84,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return 1;
         }
 
-        private void PlatformConstruct(bool isVertexShader, byte[] shaderBytecode)
+        private void PlatformConstruct(ShaderStage stage, byte[] shaderBytecode)
         {
             // We need the bytecode later for allocating the
             // input layout from the vertex declaration.
@@ -59,8 +92,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
             HashKey = MonoGame.Utilities.Hash.ComputeHash(Bytecode);
 
-            if (isVertexShader)
+            if (stage == ShaderStage.Vertex)
                 CreateVertexShader();
+            else if (stage == ShaderStage.Hull)
+                CreateHullShader();
+            else if (stage == ShaderStage.Domain)
+                CreateDomainShader();
+            else if (stage == ShaderStage.Geometry)
+                CreateGeometryShader();
             else
                 CreatePixelShader();
         }
@@ -68,6 +107,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private void PlatformGraphicsDeviceResetting()
         {
             SharpDX.Utilities.Dispose(ref _vertexShader);
+            SharpDX.Utilities.Dispose(ref _hullShader);
+            SharpDX.Utilities.Dispose(ref _domainShader);
+            SharpDX.Utilities.Dispose(ref _geometryShader);
             SharpDX.Utilities.Dispose(ref _pixelShader);
             SharpDX.Utilities.Dispose(ref _inputLayouts);
         }
@@ -77,6 +119,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (disposing)
             {
                 SharpDX.Utilities.Dispose(ref _vertexShader);
+                SharpDX.Utilities.Dispose(ref _hullShader);
+                SharpDX.Utilities.Dispose(ref _domainShader);
+                SharpDX.Utilities.Dispose(ref _geometryShader);
                 SharpDX.Utilities.Dispose(ref _pixelShader);
                 SharpDX.Utilities.Dispose(ref _inputLayouts);
             }
@@ -95,6 +140,24 @@ namespace Microsoft.Xna.Framework.Graphics
             System.Diagnostics.Debug.Assert(Stage == ShaderStage.Vertex);
             _vertexShader = new VertexShader(GraphicsDevice._d3dDevice, _shaderBytecode, null);
             _inputLayouts = new InputLayoutCache(GraphicsDevice, Bytecode);
+        }
+
+        private void CreateGeometryShader()
+        {
+            System.Diagnostics.Debug.Assert(Stage == ShaderStage.Geometry);
+            _geometryShader = new GeometryShader(GraphicsDevice._d3dDevice, _shaderBytecode);
+        }
+
+        private void CreateDomainShader()
+        {
+            System.Diagnostics.Debug.Assert(Stage == ShaderStage.Domain);
+            _domainShader = new DomainShader(GraphicsDevice._d3dDevice, _shaderBytecode);
+        }
+
+        private void CreateHullShader()
+        {
+            System.Diagnostics.Debug.Assert(Stage == ShaderStage.Hull);
+            _hullShader = new HullShader(GraphicsDevice._d3dDevice, _shaderBytecode);
         }
     }
 }

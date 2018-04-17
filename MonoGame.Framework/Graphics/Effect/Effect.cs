@@ -315,6 +315,24 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (shaderIndex != 255)
                     vertexShader = shaders[shaderIndex];
 
+                // Get the geometry shader.
+                Shader hullShader = null;
+                shaderIndex = (int)reader.ReadByte();
+                if (shaderIndex != 255)
+                    hullShader = shaders[shaderIndex];
+
+                // Get the domain shader.
+                Shader domainShader = null;
+                shaderIndex = (int)reader.ReadByte();
+                if (shaderIndex != 255)
+                    domainShader = shaders[shaderIndex];
+
+                // Get the geometry shader.
+                Shader geometryShader = null;
+                shaderIndex = (int)reader.ReadByte();
+                if (shaderIndex != 255)
+                    geometryShader = shaders[shaderIndex];
+
                 // Get the pixel shader.
                 Shader pixelShader = null;
                 shaderIndex = (int)reader.ReadByte();
@@ -377,7 +395,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					};
 				}
 
-                passes[i] = new EffectPass(effect, name, vertexShader, pixelShader, blend, depth, raster, annotations);
+                passes[i] = new EffectPass(effect, name, vertexShader, pixelShader, blend, depth, raster, annotations, geometryShader, hullShader, domainShader);
 			}
 
             return new EffectPassCollection(passes);

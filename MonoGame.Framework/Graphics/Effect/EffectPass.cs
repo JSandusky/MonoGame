@@ -7,6 +7,9 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly Effect _effect;
 
 		private readonly Shader _pixelShader;
+        private readonly Shader _hullShader;
+        private readonly Shader _domainShader;
+        private readonly Shader _geometryShader;
         private readonly Shader _vertexShader;
 
         private readonly BlendState _blendState;
@@ -24,7 +27,10 @@ namespace Microsoft.Xna.Framework.Graphics
                                 BlendState blendState, 
                                 DepthStencilState depthStencilState, 
                                 RasterizerState rasterizerState,
-                                EffectAnnotationCollection annotations )
+                                EffectAnnotationCollection annotations, 
+                                Shader geometryShader = null,
+                                Shader hullShader = null,
+                                Shader domainShader = null)
         {
             Debug.Assert(effect != null, "Got a null effect!");
             Debug.Assert(annotations != null, "Got a null annotation collection!");
@@ -34,6 +40,9 @@ namespace Microsoft.Xna.Framework.Graphics
             Name = name;
 
             _vertexShader = vertexShader;
+            _hullShader = hullShader;
+            _domainShader = domainShader;
+            _geometryShader = geometryShader;
             _pixelShader = pixelShader;
 
             _blendState = blendState;
@@ -57,6 +66,9 @@ namespace Microsoft.Xna.Framework.Graphics
             _rasterizerState = cloneSource._rasterizerState;
             Annotations = cloneSource.Annotations;
             _vertexShader = cloneSource._vertexShader;
+            _hullShader = cloneSource._hullShader;
+            _domainShader = cloneSource._domainShader;
+            _geometryShader = cloneSource._geometryShader;
             _pixelShader = cloneSource._pixelShader;
         }
 
@@ -89,6 +101,47 @@ namespace Microsoft.Xna.Framework.Graphics
                     device.SetConstantBuffer(ShaderStage.Vertex, c, cb);
                 }
             }
+
+            if (_hullShader != null)
+            {
+                device.HullShader = _hullShader;
+                for (var c = 0; c < _hullShader.CBuffers.Length; c++)
+                {
+                    var cb = _effect.ConstantBuffers[_hullShader.CBuffers[c]];
+                    cb.Update(_effect.Parameters);
+                    device.SetConstantBuffer(ShaderStage.Hull, c, cb);
+                }
+            }
+            else
+                device.HullShader = null;
+
+            if (_domainShader != null)
+            {
+                device.DomainShader = _domainShader;
+                for (var c = 0; c < _domainShader.CBuffers.Length; c++)
+                {
+                    var cb = _effect.ConstantBuffers[_domainShader.CBuffers[c]];
+                    cb.Update(_effect.Parameters);
+                    device.SetConstantBuffer(ShaderStage.Domain, c, cb);
+                }
+            }
+            else
+                device.DomainShader = null;
+
+            if (_geometryShader != null)
+            {
+                device.GeometryShader = _geometryShader;
+
+                // Update the constant buffers.
+                for (var c = 0; c < _geometryShader.CBuffers.Length; c++)
+                {
+                    var cb = _effect.ConstantBuffers[_geometryShader.CBuffers[c]];
+                    cb.Update(_effect.Parameters);
+                    device.SetConstantBuffer(ShaderStage.Geometry, c, cb);
+                }
+            }
+            else
+                device.GeometryShader = null;
 
             if (_pixelShader != null)
             {

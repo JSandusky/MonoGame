@@ -63,8 +63,7 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             GraphicsDevice = device;
 
-            var isVertexShader = reader.ReadBoolean();
-            Stage = isVertexShader ? ShaderStage.Vertex : ShaderStage.Pixel;
+            Stage = (ShaderStage)reader.ReadInt32();
 
             var shaderLength = reader.ReadInt32();
             var shaderBytecode = reader.ReadBytes(shaderLength);
@@ -113,7 +112,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 Attributes[a].location = reader.ReadInt16();
             }
 
-            PlatformConstruct(isVertexShader, shaderBytecode);
+            PlatformConstruct(Stage, shaderBytecode);
         }
 
         internal protected override void GraphicsDeviceResetting()
