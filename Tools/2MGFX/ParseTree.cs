@@ -422,6 +422,15 @@ namespace TwoMGFX
                 case TokenType.VertexShader_Pass_Expression:
                     Value = EvalVertexShader_Pass_Expression(tree, paramlist);
                     break;
+                case TokenType.HullShader_Pass_Expression:
+                    Value = EvalHullShader_Pass_Expression(tree, paramlist);
+                    break;
+                case TokenType.DomainShader_Pass_Expression:
+                    Value = EvalDomainShader_Pass_Expression(tree, paramlist);
+                    break;
+                case TokenType.GeometryShader_Pass_Expression:
+                    Value = EvalGeometryShader_Pass_Expression(tree, paramlist);
+                    break;
                 case TokenType.PixelShader_Pass_Expression:
                     Value = EvalPixelShader_Pass_Expression(tree, paramlist);
                     break;
@@ -957,6 +966,30 @@ namespace TwoMGFX
            pass.vsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
            pass.vsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
            return null;
+        }
+
+        protected virtual object EvalHullShader_Pass_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var pass = paramlist[0] as PassInfo;
+            pass.hsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+            pass.hsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+            return null;
+        }
+
+        protected virtual object EvalDomainShader_Pass_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var pass = paramlist[0] as PassInfo;
+            pass.dsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+            pass.dsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+            return null;
+        }
+
+        protected virtual object EvalGeometryShader_Pass_Expression(ParseTree tree, params object[] paramlist)
+        {
+            var pass = paramlist[0] as PassInfo;
+            pass.gsModel = this.GetValue(tree, TokenType.ShaderModel, 0) as string;
+            pass.gsFunction = this.GetValue(tree, TokenType.Identifier, 0) as string;
+            return null;
         }
 
         protected virtual object EvalPixelShader_Pass_Expression(ParseTree tree, params object[] paramlist)

@@ -61,10 +61,16 @@ namespace TwoMGFX
                         memWriter.Write(pass.name);
                         WriteAnnotations(memWriter, pass.annotation_handles);
 
-                    // Write the index for the vertex and pixel shaders.
+                        // Write the index for the vertex and pixel shaders.
                     var vertexShader = GetShaderIndex(STATE_CLASS.VERTEXSHADER, pass.states);
+                    var hullShader = GetShaderIndex(STATE_CLASS.HULLSHADER, pass.states);
+                    var domainShader = GetShaderIndex(STATE_CLASS.DOMAINSHADER, pass.states);
+                    var geometryShader = GetShaderIndex(STATE_CLASS.GEOMETRYSHADER, pass.states);
                     var pixelShader = GetShaderIndex(STATE_CLASS.PIXELSHADER, pass.states);
                         memWriter.Write((byte)vertexShader);
+                        memWriter.Write((byte)hullShader);
+                        memWriter.Write((byte)domainShader);
+                        memWriter.Write((byte)pixelShader);
                         memWriter.Write((byte)pixelShader);
 
                     // Write the state objects too!

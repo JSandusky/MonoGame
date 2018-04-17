@@ -4,14 +4,14 @@ namespace TwoMGFX
 {
 	internal partial class ShaderData
 	{
-		public ShaderData(bool isVertexShader, int sharedIndex, byte[] bytecode)
+		public ShaderData(ShaderStage shaderStage, int sharedIndex, byte[] bytecode)
 		{
-			IsVertexShader = isVertexShader;
+		    ShaderStage = shaderStage;
 			SharedIndex = sharedIndex;
 			Bytecode = (byte[])bytecode.Clone();	    
 		}
 
-		public bool IsVertexShader { get; private set; }
+		public ShaderStage ShaderStage { get; private set; }
 
 		public struct Sampler
 		{

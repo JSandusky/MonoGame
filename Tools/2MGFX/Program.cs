@@ -78,6 +78,9 @@ namespace TwoMGFX
 
                 // Let the user know what happened.
                 Console.Error.WriteLine("Unexpected error compiling '{0}'!", options.SourceFile);
+                if (ex.InnerException != null)
+                    Console.Error.WriteLine(ex.InnerException.Message);
+                Console.Error.WriteLine(ex.StackTrace);
                 return 1;
             }
             

@@ -17,6 +17,9 @@
 [IgnoreCase] Sampler -> @"sampler1D|sampler2D|sampler3D|samplerCUBE|SamplerState|sampler";
 [IgnoreCase] SamplerState -> @"sampler_state";
 [IgnoreCase] VertexShader -> @"VertexShader";
+[IgnoreCase] HullShader -> @"HullShader";
+[IgnoreCase] DomainShader -> @"DomainShader";
+[IgnoreCase] GeometryShader -> @"GeometryShader";
 [IgnoreCase] PixelShader -> @"PixelShader";
 [IgnoreCase] Register -> @"register";
 [IgnoreCase] Boolean -> @"true|false|0|1";
@@ -345,6 +348,30 @@ VertexShader_Pass_Expression -> VertexShader Equals Compile ShaderModel Identifi
    var pass = paramlist[0] as PassInfo;
    pass.vsModel = $ShaderModel as string;
    pass.vsFunction = $Identifier as string;
+   return null;
+};
+
+HullShader_Pass_Expression -> HullShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+{
+   var pass = paramlist[0] as PassInfo;
+   pass.hsModel = $ShaderModel as string;
+   pass.hsFunction = $Identifier as string;
+   return null;
+};
+
+DomainShader_Pass_Expression -> DomainShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+{
+   var pass = paramlist[0] as PassInfo;
+   pass.dsModel = $ShaderModel as string;
+   pass.dsFunction = $Identifier as string;
+   return null;
+};
+
+GeometryShader_Pass_Expression -> GeometryShader Equals Compile ShaderModel Identifier OpenParenthesis CloseParenthesis Semicolon
+{
+   var pass = paramlist[0] as PassInfo;
+   pass.gsModel = $ShaderModel as string;
+   pass.gsFunction = $Identifier as string;
    return null;
 };
 
