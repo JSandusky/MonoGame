@@ -2630,7 +2630,6 @@ namespace TwoMGFX
 
         private void GenericShader_Pass_Expression(ParseNode parent, String exprString, TokenType parseExpr, TokenType shaderType)
         {
-            System.Console.WriteLine("Parsing shader pass: " + parseExpr.ToString());
             Token tok;
             ParseNode n;
             ParseNode node = parent.CreateNode(scanner.GetToken(parseExpr), exprString);
