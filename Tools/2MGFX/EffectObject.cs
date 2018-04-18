@@ -742,7 +742,7 @@ namespace TwoMGFX
                     if (!string.IsNullOrEmpty(pinfo.hsFunction))
                     {
                         pass.state_count += 1;
-                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.hsFunction, pinfo.gsModel, ShaderStage.HullShader, ref errorsAndWarnings);
+                        tempstate[pass.state_count - 1] = effect.CreateShader(shaderResult, pinfo.hsFunction, pinfo.hsModel, ShaderStage.HullShader, ref errorsAndWarnings);
                     }
 
                     if (!string.IsNullOrEmpty(pinfo.dsFunction))
