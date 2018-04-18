@@ -18,6 +18,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public string Name { get; private set; }
 
+        public bool IsTessellating { get { return _hullShader != null && _domainShader != null; } }
+
         public EffectAnnotationCollection Annotations { get; private set; }
 
         internal EffectPass(    Effect effect, 
@@ -105,6 +107,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_hullShader != null)
             {
                 device.HullShader = _hullShader;
+                // Update the texture parameters, shared with Vertex shader state
+                // Hull shader might want to look up a displacement map or tessellation power map.
+                SetShaderSamplers(_hullShader, device.VertexTextures, device.VertexSamplerStates);
                 for (var c = 0; c < _hullShader.CBuffers.Length; c++)
                 {
                     var cb = _effect.ConstantBuffers[_hullShader.CBuffers[c]];
@@ -118,6 +123,9 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_domainShader != null)
             {
                 device.DomainShader = _domainShader;
+                // Update the texture parameters, shared with vertex shader state.
+                // Domain shader might want to look up a displacement map.
+                SetShaderSamplers(_domainShader, device.VertexTextures, device.VertexSamplerStates);
                 for (var c = 0; c < _domainShader.CBuffers.Length; c++)
                 {
                     var cb = _effect.ConstantBuffers[_domainShader.CBuffers[c]];
@@ -131,7 +139,6 @@ namespace Microsoft.Xna.Framework.Graphics
             if (_geometryShader != null)
             {
                 device.GeometryShader = _geometryShader;
-
                 // Update the constant buffers.
                 for (var c = 0; c < _geometryShader.CBuffers.Length; c++)
                 {

@@ -1182,6 +1182,12 @@ namespace Microsoft.Xna.Framework.Graphics
                     return PrimitiveTopology.TriangleList;
                 case PrimitiveType.TriangleStrip:
                     return PrimitiveTopology.TriangleStrip;
+                case PrimitiveType.PatchTriangleList:
+                    return PrimitiveTopology.PatchListWith3ControlPoints;
+                case PrimitiveType.PatchQuadList:
+                    return PrimitiveTopology.PatchListWith4ControlPoints;
+                case PrimitiveType.PointList:
+                    return PrimitiveTopology.PointList;
             }
 
             throw new ArgumentException();

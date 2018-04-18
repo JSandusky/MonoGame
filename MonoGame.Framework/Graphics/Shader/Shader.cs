@@ -59,11 +59,15 @@ namespace Microsoft.Xna.Framework.Graphics
 
         public VertexAttribute[] Attributes { get; private set; }
 
-        internal Shader(GraphicsDevice device, BinaryReader reader)
+        internal Shader(GraphicsDevice device, BinaryReader reader, int mgfxVersion)
         {
             GraphicsDevice = device;
 
-            Stage = (ShaderStage)reader.ReadInt32();
+            // Older versions only support Pixel and Vertex shaders
+            if (mgfxVersion < 9)
+                Stage = reader.ReadBoolean() ? ShaderStage.Vertex : ShaderStage.Pixel;
+            else
+                Stage = (ShaderStage)reader.ReadInt32();
 
             var shaderLength = reader.ReadInt32();
             var shaderBytecode = reader.ReadBytes(shaderLength);

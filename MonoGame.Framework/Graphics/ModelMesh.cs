@@ -84,7 +84,10 @@ namespace Microsoft.Xna.Framework.Graphics
                     for (int j = 0; j < effect.CurrentTechnique.Passes.Count; j++)
                     {
 						effect.CurrentTechnique.Passes[j].Apply ();
-						graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);
+                        if (effect.CurrentTechnique.Passes[j].IsTessellating)
+                            graphicsDevice.DrawIndexedPrimitives(PrimitiveType.PatchTriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);
+                        else
+						    graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, part.VertexOffset, part.StartIndex, part.PrimitiveCount);
 					}
 				}
 			}

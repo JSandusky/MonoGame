@@ -28,5 +28,20 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Renders the vertices as a single polyline; the count may be any positive integer.
         /// </summary>
 		LineStrip,
+
+        /// <summary>
+        /// Renders a tessellation patch triangle
+        /// </summary>
+        PatchTriangleList,
+        
+        /// <summary>
+        /// Renders a tessellation patch triangle
+        /// </summary>
+        PatchQuadList,
+
+        /// <summary>
+        /// Renders a set of points, only intended for geometry shader expansion
+        /// </summary>
+        PointList
 	}
 }

@@ -104,7 +104,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 // Create one.
                 cloneSource = new Effect(graphicsDevice);
-                    cloneSource.ReadEffect(reader);
+                    cloneSource.ReadEffect(reader, header.Version);
 
                 // Cache the effect for later in its original unmodified state.
                     graphicsDevice.EffectCache.Add(effectKey, cloneSource);
@@ -227,7 +227,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
         #region Effect File Reader
 
-		private void ReadEffect (BinaryReader reader)
+		private void ReadEffect (BinaryReader reader, int mgfxVersion)
 		{
 			// TODO: Maybe we should be reading in a string 
 			// table here to save some bytes in the file.
@@ -263,7 +263,7 @@ namespace Microsoft.Xna.Framework.Graphics
             var shaders = (int)reader.ReadByte();
             _shaders = new Shader[shaders];
             for (var s = 0; s < shaders; s++)
-                _shaders[s] = new Shader(GraphicsDevice, reader);
+                _shaders[s] = new Shader(GraphicsDevice, reader, mgfxVersion);
 
             // Read in the parameters.
             Parameters = ReadParameters(reader);
@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
                 var annotations = ReadAnnotations(reader);
 
-                var passes = ReadPasses(reader, this, _shaders);
+                var passes = ReadPasses(reader, this, _shaders, mgfxVersion);
 
                 techniques[t] = new EffectTechnique(this, name, passes, annotations);
             }
@@ -299,7 +299,7 @@ namespace Microsoft.Xna.Framework.Graphics
             return new EffectAnnotationCollection(annotations);
         }
 
-        private static EffectPassCollection ReadPasses(BinaryReader reader, Effect effect, Shader[] shaders)
+        private static EffectPassCollection ReadPasses(BinaryReader reader, Effect effect, Shader[] shaders, int mgfxVersion)
         {
             var count = (int)reader.ReadByte();
             var passes = new EffectPass[count];
@@ -315,23 +315,26 @@ namespace Microsoft.Xna.Framework.Graphics
                 if (shaderIndex != 255)
                     vertexShader = shaders[shaderIndex];
 
-                // Get the geometry shader.
                 Shader hullShader = null;
-                shaderIndex = (int)reader.ReadByte();
-                if (shaderIndex != 255)
-                    hullShader = shaders[shaderIndex];
-
-                // Get the domain shader.
                 Shader domainShader = null;
-                shaderIndex = (int)reader.ReadByte();
-                if (shaderIndex != 255)
-                    domainShader = shaders[shaderIndex];
-
-                // Get the geometry shader.
                 Shader geometryShader = null;
-                shaderIndex = (int)reader.ReadByte();
-                if (shaderIndex != 255)
-                    geometryShader = shaders[shaderIndex];
+                if (mgfxVersion >= 9)
+                {
+                    // Get the geometry shader.
+                    shaderIndex = (int)reader.ReadByte();
+                    if (shaderIndex != 255)
+                        hullShader = shaders[shaderIndex];
+
+                    // Get the domain shader.
+                    shaderIndex = (int)reader.ReadByte();
+                    if (shaderIndex != 255)
+                        domainShader = shaders[shaderIndex];
+
+                    // Get the geometry shader.
+                    shaderIndex = (int)reader.ReadByte();
+                    if (shaderIndex != 255)
+                        geometryShader = shaders[shaderIndex];
+                }
 
                 // Get the pixel shader.
                 Shader pixelShader = null;
