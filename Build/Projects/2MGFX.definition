@@ -191,6 +191,7 @@
     <Compile Include="IEffectCompilerOutput.cs" />
     <Compile Include="ShaderCompilerException.cs" />
     <Compile Include="ShaderData.cs" />
+    <Compile Include="ShaderStage.cs" />
     <Compile Include="ShaderData.mojo.cs" />
     <Compile Include="ShaderData.pssl.cs" />
     <Compile Include="ShaderData.sharpdx.cs" />
