@@ -7,7 +7,7 @@ namespace Microsoft.Xna.Framework.Graphics
     public sealed class ConstantBufferCollection
     {
         private readonly ConstantBuffer[] _buffers;
-
+        private readonly bool[] _locks;
         private ShaderStage _stage;
         private ShaderStage Stage { get { return this._stage; } }
 
@@ -17,7 +17,13 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             _stage = stage;
             _buffers = new ConstantBuffer[maxBuffers];
+            _locks = new bool[maxBuffers];
             _valid = 0;
+        }
+
+        public void Lock(int slot, bool state)
+        {
+            _locks[slot] = state;
         }
 
         public ConstantBuffer this[int index]
@@ -25,6 +31,8 @@ namespace Microsoft.Xna.Framework.Graphics
             get { return _buffers[index]; }
             set
             {
+                if (_locks[index])
+                    return;
                 if (_buffers[index] == value)
                     return;
 
