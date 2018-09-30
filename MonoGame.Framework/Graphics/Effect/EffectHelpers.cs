@@ -17,7 +17,7 @@ namespace Microsoft.Xna.Framework.Graphics
     /// Track which effect parameters need to be recomputed during the next OnApply.
     /// </summary>
     [Flags]
-    internal enum EffectDirtyFlags
+    public enum EffectDirtyFlags
     {
         WorldViewProj   = 1,
         World           = 2,
@@ -34,12 +34,12 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Helper code shared between the various built-in effects.
     /// </summary>
-    internal static class EffectHelpers
+    public static class EffectHelpers
     {
         /// <summary>
         /// Sets up the standard key/fill/back lighting rig.
         /// </summary>
-        internal static Vector3 EnableDefaultLighting(DirectionalLight light0, DirectionalLight light1, DirectionalLight light2)
+        public static Vector3 EnableDefaultLighting(DirectionalLight light0, DirectionalLight light1, DirectionalLight light2)
         {
             // Key light.
             light0.Direction = new Vector3(-0.5265408f, -0.5735765f, -0.6275069f);
@@ -68,7 +68,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Lazily recomputes the world+view+projection matrix and
         /// fog vector based on the current effect parameter settings.
         /// </summary>
-        internal static EffectDirtyFlags SetWorldViewProjAndFog(EffectDirtyFlags dirtyFlags,
+        public static EffectDirtyFlags SetWorldViewProjAndFog(EffectDirtyFlags dirtyFlags,
                                                                 ref Matrix world, ref Matrix view, ref Matrix projection, ref Matrix worldView,
                                                                 bool fogEnabled, float fogStart, float fogEnd,
                                                                 EffectParameter worldViewProjParam, EffectParameter fogVectorParam)
@@ -146,7 +146,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Lazily recomputes the world inverse transpose matrix and
         /// eye position based on the current effect parameter settings.
         /// </summary>
-        internal static EffectDirtyFlags SetLightingMatrices(EffectDirtyFlags dirtyFlags, ref Matrix world, ref Matrix view,
+        public static EffectDirtyFlags SetLightingMatrices(EffectDirtyFlags dirtyFlags, ref Matrix world, ref Matrix view,
                                                              EffectParameter worldParam, EffectParameter worldInverseTransposeParam, EffectParameter eyePositionParam)
         {
             // Set the world and world inverse transpose matrices.
@@ -183,7 +183,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <summary>
         /// Sets the diffuse/emissive/alpha material color parameters.
         /// </summary>
-        internal static void SetMaterialColor(bool lightingEnabled, float alpha,
+        public static void SetMaterialColor(bool lightingEnabled, float alpha,
                                               ref Vector3 diffuseColor, ref Vector3 emissiveColor, ref Vector3 ambientLightColor,
                                               EffectParameter diffuseColorParam, EffectParameter emissiveColorParam)
         {

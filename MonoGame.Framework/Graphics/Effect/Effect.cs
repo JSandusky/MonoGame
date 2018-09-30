@@ -26,6 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
             /// as users should be rebuilding content when packaging their game.
             /// </remarks>
             public const int MGFXVersion = 8;
+            public const int NewMGFXVersion = 9;
 
             public int Signature;
             public int Version;
@@ -129,7 +130,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 throw new Exception("This does not appear to be a MonoGame MGFX file!");
             if (header.Version < MGFXHeader.MGFXVersion)
                 throw new Exception("This MGFX effect is for an older release of MonoGame and needs to be rebuilt.");
-            if (header.Version > MGFXHeader.MGFXVersion)
+            if (header.Version > MGFXHeader.NewMGFXVersion)
                 throw new Exception("This MGFX effect seems to be for a newer release of MonoGame.");
 
             if (header.Profile != Shader.Profile)

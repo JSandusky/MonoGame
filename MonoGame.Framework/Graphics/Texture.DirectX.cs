@@ -25,6 +25,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 return resource.SharedHandle;
         }
 
+        public IntPtr GetNativeHandle()
+        {
+            return GetShaderResourceView().NativePointer;
+        }
+
         internal abstract SharpDX.Direct3D11.Resource CreateTexture();
 
         internal SharpDX.Direct3D11.Resource GetTexture()

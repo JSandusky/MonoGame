@@ -103,6 +103,17 @@ namespace Microsoft.Xna.Framework.Graphics
             }
         }
 
+        public object BackBuffer
+        {
+            get { return _renderTargetView; }
+        }
+
+        public object ContextHandle
+        {
+            get { return _d3dContext; }
+        }
+
+
         private void PlatformSetup()
         {
             MaxTextureSlots = 16;

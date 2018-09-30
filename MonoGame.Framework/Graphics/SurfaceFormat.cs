@@ -160,6 +160,8 @@ namespace Microsoft.Xna.Framework.Graphics
         RgbaAtcInterpolatedAlpha = 81,
 
         #endregion
+
+        R16G16B16A16Uint,
     }
 }
 
