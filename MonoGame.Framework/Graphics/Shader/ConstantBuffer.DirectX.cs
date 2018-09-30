@@ -3,9 +3,11 @@
 // file 'LICENSE.txt', which is part of this source code package.
 
 
+using System.Runtime.InteropServices;
+
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    public partial class ConstantBuffer : GraphicsResource
     {
         private SharpDX.Direct3D11.Buffer _cbuffer;
 
@@ -25,6 +27,34 @@ namespace Microsoft.Xna.Framework.Graphics
         {
             SharpDX.Utilities.Dispose(ref _cbuffer);
             _dirty = true;
+        }
+
+        public void SetData(byte[] data)
+        {
+            if (_cbuffer == null)
+                PlatformInitialize();
+
+            var d3dContext = GraphicsDevice._d3dContext;
+            d3dContext.UpdateSubresource(data, _cbuffer);
+        }
+
+        public void SetData<T>(T[] data)
+        {
+            if (_cbuffer == null)
+                PlatformInitialize();
+
+            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+
+            try
+            {
+                var dataPtr = (System.IntPtr)(dataHandle.AddrOfPinnedObject().ToInt64());
+                var d3dContext = GraphicsDevice._d3dContext;
+                d3dContext.UpdateSubresource(_cbuffer, 0, null, dataPtr, 0, 0);
+            }
+            finally
+            {
+                dataHandle.Free();
+            }
         }
 
         internal void PlatformApply(GraphicsDevice device, ShaderStage stage, int slot)

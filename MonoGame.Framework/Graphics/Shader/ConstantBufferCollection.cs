@@ -4,7 +4,7 @@
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal sealed class ConstantBufferCollection
+    public sealed class ConstantBufferCollection
     {
         private readonly ConstantBuffer[] _buffers;
 

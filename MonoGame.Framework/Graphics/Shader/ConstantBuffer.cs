@@ -6,7 +6,7 @@ using System;
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    internal partial class ConstantBuffer : GraphicsResource
+    public partial class ConstantBuffer : GraphicsResource
     {
         private readonly byte[] _buffer;
 
@@ -35,6 +35,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
             // Clone the mutable types.
             _buffer = (byte[])cloneSource._buffer.Clone();
+            PlatformInitialize();
+        }
+
+        public ConstantBuffer(GraphicsDevice device, int sizeInBytes, string name)
+        {
+            GraphicsDevice = device;
+
+            _buffer = new byte[sizeInBytes];
+            _name = name;
+
             PlatformInitialize();
         }
 
