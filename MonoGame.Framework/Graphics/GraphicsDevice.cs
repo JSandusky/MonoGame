@@ -148,6 +148,12 @@ namespace Microsoft.Xna.Framework.Graphics
         private readonly ConstantBufferCollection _geometryConstantBuffers = new ConstantBufferCollection(ShaderStage.Geometry, 16);
         private readonly ConstantBufferCollection _pixelConstantBuffers = new ConstantBufferCollection(ShaderStage.Pixel, 16);
 
+        public ConstantBufferCollection VertexConstantBuffers { get { return _vertexConstantBuffers; } }
+        public ConstantBufferCollection HullConstantBuffers { get { return _hullConstantBuffers; } }
+        public ConstantBufferCollection DomainConstantBuffers { get { return _domainConstantBuffers; } }
+        public ConstantBufferCollection GeometryConstantBuffers { get { return _geometryConstantBuffers; } }
+        public ConstantBufferCollection PixelConstantBuffers { get { return _pixelConstantBuffers; } }
+
         /// <summary>
         /// The cache of effects from unique byte streams.
         /// </summary>
