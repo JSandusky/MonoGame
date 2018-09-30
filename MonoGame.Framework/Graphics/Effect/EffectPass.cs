@@ -109,7 +109,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 device.HullShader = _hullShader;
                 // Update the texture parameters, shared with Vertex shader state
                 // Hull shader might want to look up a displacement map or tessellation power map.
-                SetShaderSamplers(_hullShader, device.VertexTextures, device.VertexSamplerStates);
+                SetShaderSamplers(_hullShader, device.HullTextures, device.HullSamplerStates);
                 for (var c = 0; c < _hullShader.CBuffers.Length; c++)
                 {
                     var cb = _effect.ConstantBuffers[_hullShader.CBuffers[c]];
@@ -125,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
                 device.DomainShader = _domainShader;
                 // Update the texture parameters, shared with vertex shader state.
                 // Domain shader might want to look up a displacement map.
-                SetShaderSamplers(_domainShader, device.VertexTextures, device.VertexSamplerStates);
+                SetShaderSamplers(_domainShader, device.DomainTextures, device.DomainSamplerStates);
                 for (var c = 0; c < _domainShader.CBuffers.Length; c++)
                 {
                     var cb = _effect.ConstantBuffers[_domainShader.CBuffers[c]];
@@ -140,6 +140,7 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 device.GeometryShader = _geometryShader;
                 // Update the constant buffers.
+                SetShaderSamplers(_geometryShader, device.GeometryTextures, device.GeometrySamplerStates);
                 for (var c = 0; c < _geometryShader.CBuffers.Length; c++)
                 {
                     var cb = _effect.ConstantBuffers[_geometryShader.CBuffers[c]];
