@@ -573,6 +573,42 @@ namespace Microsoft.Xna.Framework
         }
 
         #endregion
+
+        public static BoundingFrustum CreateVRFrustum_Points(BoundingFrustum lhs, BoundingFrustum rhs)
+        {
+            Vector3 lhsCentroid = new Vector3();
+            Vector3 rhsCentroid = new Vector3();
+            Vector3[] lhsCorners = lhs._corners;
+            Vector3[] rhsCorners = rhs._corners;
+            for (int i = 0; i < 8; ++i)
+            {
+                lhsCentroid += lhsCorners[i];
+                rhsCentroid += rhsCorners[i];
+            }
+            lhsCentroid *= 1 / 8;
+            rhsCentroid *= 1 / 8;
+            Vector3 centroid = (lhsCentroid + rhsCentroid) * 0.5f;
+
+            // Take each corner from the farthest
+            for (int i = 0; i < 8; ++i)
+                lhsCorners[i] = Vector3.DistanceSquared(lhsCorners[i], centroid) > Vector3.DistanceSquared(rhsCorners[i], centroid) ? lhsCorners[i] : rhsCorners[i];
+
+            BoundingFrustum ret = new BoundingFrustum(Matrix.Identity);
+            for (int i = 0; i < 8; ++i)
+                ret._corners[i] = lhsCorners[i];
+
+            ret._planes[0] = new Plane(ret._corners[0], ret._corners[1], ret._corners[3]);
+            ret._planes[1] = new Plane(ret._corners[5], ret._corners[4], ret._corners[6]);
+            //ret._planes[2] = new Plane(ret._corners[0], ret._corners[4], ret._corners[3]);
+            //ret._planes[3] = new Plane(ret._corners[1], ret._corners[5], ret._corners[2]);
+            ret._planes[4] = new Plane(ret._corners[0], ret._corners[4], ret._corners[1]);
+            ret._planes[5] = new Plane(ret._corners[2], ret._corners[1], ret._corners[3]);
+
+            ret._planes[2] = lhs._planes[2];
+            ret._planes[3] = rhs._planes[3];
+
+            return ret;
+        }
     }
 }
 
